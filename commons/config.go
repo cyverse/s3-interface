@@ -10,7 +10,9 @@ import (
 )
 
 const (
-	ServicePortDefault int = 8080
+	ServicePortDefault        int    = 8080
+	IrodsPortDefault          int    = 1247
+	IrodsSharedDirnameDefault string = "public"
 )
 
 func GetDefaultDataRootDirPath() string {
@@ -28,6 +30,13 @@ type Config struct {
 
 	LogPath string `yaml:"log_path,omitempty"`
 
+	IrodsHost          string `yaml:"irods_host"`
+	IrodsPort          int    `yaml:"irods_port"`
+	IrodsAdminUsername string `yaml:"irods_admin_username"`
+	IrodsAdminPassword string `yaml:"irods_admin_password"`
+
+	IrodsSharedDirname string `yaml:"irods_shared_dirname,omitempty"`
+
 	Foreground   bool `yaml:"foreground,omitempty"`
 	Debug        bool `yaml:"debug,omitempty"`
 	ChildProcess bool `yaml:"childprocess,omitempty"`
@@ -40,6 +49,12 @@ func NewDefaultConfig() *Config {
 		DataRootPath: GetDefaultDataRootDirPath(),
 
 		LogPath: "", // use default
+
+		IrodsHost:          "",
+		IrodsPort:          IrodsPortDefault,
+		IrodsAdminUsername: "",
+		IrodsAdminPassword: "",
+		IrodsSharedDirname: IrodsSharedDirnameDefault,
 
 		Foreground:   false,
 		Debug:        false,
@@ -137,6 +152,22 @@ func (config *Config) Validate() error {
 
 	if len(config.DataRootPath) == 0 {
 		return xerrors.Errorf("data root dir must be given")
+	}
+
+	if len(config.IrodsHost) == 0 {
+		return xerrors.Errorf("irods host must be given")
+	}
+
+	if config.IrodsPort <= 0 {
+		return xerrors.Errorf("irods port must be given")
+	}
+
+	if len(config.IrodsAdminUsername) == 0 {
+		return xerrors.Errorf("irods admin username must be given")
+	}
+
+	if len(config.IrodsAdminPassword) == 0 {
+		return xerrors.Errorf("irods admin password must be given")
 	}
 
 	return nil

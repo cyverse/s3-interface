@@ -1,4 +1,4 @@
-package service
+package s3
 
 import (
 	"context"
@@ -7,32 +7,35 @@ import (
 	"time"
 
 	"github.com/cyverse/s3rods/commons"
+	"github.com/cyverse/s3rods/irods"
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
 )
 
 // S3Service is a service object
 type S3Service struct {
-	config     *commons.Config
-	address    string
-	router     *gin.Engine
-	httpServer *http.Server
+	config          *commons.Config
+	irodsController *irods.IrodsController
+	address         string
+	router          *gin.Engine
+	httpServer      *http.Server
 }
 
 // Start starts a new S3 service
-func Start(config *commons.Config) (*S3Service, error) {
+func Start(config *commons.Config, irodsController *irods.IrodsController) (*S3Service, error) {
 	logger := log.WithFields(log.Fields{
-		"package":  "service",
-		"function": "NewS3Service",
+		"package":  "s3",
+		"function": "Start",
 	})
 
 	addr := fmt.Sprintf(":%d", config.Port)
 	router := gin.Default()
 
 	service := &S3Service{
-		config:  config,
-		address: addr,
-		router:  router,
+		config:          config,
+		irodsController: irodsController,
+		address:         addr,
+		router:          router,
 		httpServer: &http.Server{
 			Addr:    addr,
 			Handler: router,
@@ -58,12 +61,12 @@ func Start(config *commons.Config) (*S3Service, error) {
 // Stop stops the service
 func (service *S3Service) Stop() error {
 	logger := log.WithFields(log.Fields{
-		"package":  "service",
+		"package":  "s3",
 		"struct":   "S3Service",
 		"function": "Stop",
 	})
 
-	logger.Infof("Stopping the S3 service\n")
+	logger.Infof("Stopping S3 service\n")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
@@ -72,7 +75,7 @@ func (service *S3Service) Stop() error {
 		logger.Error(err)
 		return err
 	}
-	logger.Infof("Stopped the S3 service service\n")
+	logger.Infof("Stopped S3 service\n")
 
 	return nil
 }

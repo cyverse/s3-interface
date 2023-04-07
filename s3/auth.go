@@ -1,4 +1,4 @@
-package service
+package s3
 
 import (
 	"crypto/hmac"
@@ -45,7 +45,7 @@ func (credential AWSCredential) GetScopeString() string {
 
 func getSignedHeaderFields(request *http.Request) map[string]string {
 	logger := log.WithFields(log.Fields{
-		"package":  "service",
+		"package":  "s3",
 		"function": "getSignedHeaderFields",
 	})
 
@@ -240,7 +240,7 @@ func generateSignature(signingKey []byte, stringToSign string) string {
 
 func checkSignature(request *http.Request, secretKey string) (bool, error) {
 	logger := log.WithFields(log.Fields{
-		"package":  "service",
+		"package":  "s3",
 		"function": "checkSignature",
 	})
 

@@ -1,4 +1,4 @@
-package service
+package s3
 
 import (
 	"io"
@@ -19,7 +19,7 @@ func (service *S3Service) setupRouter() {
 
 func (service *S3Service) handlePing(c *gin.Context) {
 	logger := log.WithFields(log.Fields{
-		"package":  "rest",
+		"package":  "s3",
 		"struct":   "S3Service",
 		"function": "handlePing",
 	})
@@ -45,7 +45,7 @@ func (service *S3Service) setResponseHeader(header http.Header) {
 
 func (service *S3Service) handleRoot(c *gin.Context) {
 	logger := log.WithFields(log.Fields{
-		"package":  "rest",
+		"package":  "s3",
 		"struct":   "S3Service",
 		"function": "handleRoot",
 	})
@@ -84,7 +84,7 @@ func (service *S3Service) handleRoot(c *gin.Context) {
 
 func (service *S3Service) handleTest(c *gin.Context) {
 	logger := log.WithFields(log.Fields{
-		"package":  "rest",
+		"package":  "s3",
 		"struct":   "S3Service",
 		"function": "handleTest",
 	})

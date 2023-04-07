@@ -12,7 +12,8 @@ import (
 
 	cmd_commons "github.com/cyverse/s3rods/cmd/commons"
 	"github.com/cyverse/s3rods/commons"
-	"github.com/cyverse/s3rods/service"
+	"github.com/cyverse/s3rods/irods"
+	"github.com/cyverse/s3rods/s3"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -192,10 +193,17 @@ func run(config *commons.Config, isChildProcess bool) error {
 		return err
 	}
 
-	// run a service
-	svc, err := service.Start(config)
+	irodsController, err := irods.Start(config)
 	if err != nil {
-		serviceErr := xerrors.Errorf("failed to start the service: %w", err)
+		configErr := xerrors.Errorf("failed to start IRODS controller: %w", err)
+		logger.Errorf("%+v", configErr)
+		return err
+	}
+
+	// run s3 service
+	svc, err := s3.Start(config, irodsController)
+	if err != nil {
+		serviceErr := xerrors.Errorf("failed to start S3 service: %w", err)
 		logger.Errorf("%+v", serviceErr)
 		if isChildProcess {
 			cmd_commons.ReportChildProcessError()
@@ -212,6 +220,7 @@ func run(config *commons.Config, isChildProcess bool) error {
 
 	defer func() {
 		svc.Stop()
+		irodsController.Stop()
 
 		// remove work dir
 		config.CleanWorkDirs()

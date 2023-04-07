@@ -1,0 +1,7 @@
+port: 8080
+data_root_path: ./s3rods_data
+irods_host: localhost
+irods_port: 1247
+irods_admin_username: rods
+irods_admin_password: test_rods_password
+irods_shared_dirname: public
