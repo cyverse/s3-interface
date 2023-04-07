@@ -220,22 +220,22 @@ func getStringToSign(canonicalRequest string, requestTime time.Time, scopeString
 	return stringToSign
 }
 
-func sumHMAC(key []byte, data []byte) []byte {
+func hmacSum(key []byte, data []byte) []byte {
 	hash := hmac.New(sha256.New, key)
 	hash.Write(data)
 	return hash.Sum(nil)
 }
 
 func getSigningKey(secretKey string, requestTime time.Time, region string, serviceType string) []byte {
-	date := sumHMAC([]byte("AWS4"+secretKey), []byte(requestTime.Format(yyyymmdd)))
-	regionBytes := sumHMAC(date, []byte(region))
-	service := sumHMAC(regionBytes, []byte(serviceType))
-	signingKey := sumHMAC(service, []byte("aws4_request"))
+	date := hmacSum([]byte("AWS4"+secretKey), []byte(requestTime.Format(yyyymmdd)))
+	regionBytes := hmacSum(date, []byte(region))
+	service := hmacSum(regionBytes, []byte(serviceType))
+	signingKey := hmacSum(service, []byte("aws4_request"))
 	return signingKey
 }
 
 func generateSignature(signingKey []byte, stringToSign string) string {
-	return hex.EncodeToString(sumHMAC(signingKey, []byte(stringToSign)))
+	return hex.EncodeToString(hmacSum(signingKey, []byte(stringToSign)))
 }
 
 func checkSignature(request *http.Request, secretKey string) (bool, error) {

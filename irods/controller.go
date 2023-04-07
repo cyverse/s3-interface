@@ -1,6 +1,10 @@
 package irods
 
 import (
+	"fmt"
+	"time"
+
+	irodsclient_fs "github.com/cyverse/go-irodsclient/fs"
 	"github.com/cyverse/s3rods/commons"
 	log "github.com/sirupsen/logrus"
 )
@@ -38,4 +42,27 @@ func (controller *IrodsController) Stop() error {
 	logger.Infof("Stopped IRODS controller\n")
 
 	return nil
+}
+
+func (controller *IrodsController) GetUserSecretKey(username string) (string, error) {
+	//TODO: Implement this
+	return "testSecret", nil
+}
+
+func (controller *IrodsController) ListRootDirStats(username string) ([]*irodsclient_fs.Entry, error) {
+	//TODO: Implement this
+	return []*irodsclient_fs.Entry{
+		{
+			ID:         0,
+			Type:       irodsclient_fs.DirectoryEntry,
+			Name:       username,
+			Path:       fmt.Sprintf("/iplant/home/%s", username),
+			Owner:      username,
+			Size:       0,
+			DataType:   "",
+			CreateTime: time.Now(),
+			ModifyTime: time.Now(),
+			CheckSum:   "",
+		},
+	}, nil
 }
