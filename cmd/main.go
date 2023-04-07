@@ -10,17 +10,17 @@ import (
 	"github.com/spf13/cobra"
 	"golang.org/x/xerrors"
 
-	cmd_commons "github.com/cyverse/s3-interface/cmd/commons"
-	"github.com/cyverse/s3-interface/commons"
-	"github.com/cyverse/s3-interface/service"
+	cmd_commons "github.com/cyverse/s3rods/cmd/commons"
+	"github.com/cyverse/s3rods/commons"
+	"github.com/cyverse/s3rods/service"
 	log "github.com/sirupsen/logrus"
 )
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "s3-interface [args..]",
-	Short: "Run S3-Interface Service",
-	Long:  "Run S3-Interface Service that handles S3 requests.",
+	Use:   "s3rods [args..]",
+	Short: "Run S3Rods Service",
+	Long:  "Run S3Rods Service that handles S3 requests.",
 	RunE:  processCommand,
 }
 
@@ -102,14 +102,14 @@ func parentMain(command *cobra.Command, args []string) {
 		// background
 		childStdin, childStdout, err := cmd_commons.RunChildProcess(os.Args[0])
 		if err != nil {
-			childErr := xerrors.Errorf("failed to run S3-Interface Service child process: %w", err)
+			childErr := xerrors.Errorf("failed to run S3Rods Service child process: %w", err)
 			logger.Errorf("%+v", childErr)
 			os.Exit(1)
 		}
 
 		err = cmd_commons.ParentProcessSendConfigViaSTDIN(config, childStdin, childStdout)
 		if err != nil {
-			sendErr := xerrors.Errorf("failed to send configuration to S3-Interface Service child process: %w", err)
+			sendErr := xerrors.Errorf("failed to send configuration to S3Rods Service child process: %w", err)
 			logger.Errorf("%+v", sendErr)
 			os.Exit(1)
 		}
@@ -117,7 +117,7 @@ func parentMain(command *cobra.Command, args []string) {
 		// run foreground
 		err = run(config, false)
 		if err != nil {
-			runErr := xerrors.Errorf("failed to run S3-Interface Service: %w", err)
+			runErr := xerrors.Errorf("failed to run S3Rods Service: %w", err)
 			logger.Errorf("%+v", runErr)
 			os.Exit(1)
 		}
@@ -153,7 +153,7 @@ func childMain(command *cobra.Command, args []string) {
 	// background
 	err = run(config, true)
 	if err != nil {
-		runErr := xerrors.Errorf("failed to run S3-Interface Service: %w", err)
+		runErr := xerrors.Errorf("failed to run S3Rods Service: %w", err)
 		logger.Errorf("%+v", runErr)
 		os.Exit(1)
 	}
@@ -163,7 +163,7 @@ func childMain(command *cobra.Command, args []string) {
 	}
 }
 
-// run runs S3-Interface Service
+// run runs S3Rods Service
 func run(config *commons.Config, isChildProcess bool) error {
 	logger := log.WithFields(log.Fields{
 		"package":  "main",
@@ -175,7 +175,7 @@ func run(config *commons.Config, isChildProcess bool) error {
 	}
 
 	versionInfo := commons.GetVersion()
-	logger.Infof("S3-Interface Service version - %s, commit - %s", versionInfo.ServiceVersion, versionInfo.GitCommit)
+	logger.Infof("S3Rods Service version - %s, commit - %s", versionInfo.ServiceVersion, versionInfo.GitCommit)
 
 	// make work dirs required
 	err := config.MakeWorkDirs()

@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/cyverse/s3-interface/commons"
+	"github.com/cyverse/s3rods/commons"
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
 )

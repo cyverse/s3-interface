@@ -8,7 +8,7 @@ import (
 	"os/exec"
 	"strings"
 
-	"github.com/cyverse/s3-interface/commons"
+	"github.com/cyverse/s3rods/commons"
 	log "github.com/sirupsen/logrus"
 	"golang.org/x/xerrors"
 	"gopkg.in/yaml.v2"

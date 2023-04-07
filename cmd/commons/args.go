@@ -9,7 +9,7 @@ import (
 	"golang.org/x/xerrors"
 	"gopkg.in/natefinch/lumberjack.v2"
 
-	"github.com/cyverse/s3-interface/commons"
+	"github.com/cyverse/s3rods/commons"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )

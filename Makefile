@@ -1,4 +1,4 @@
-PKG=github.com/cyverse/s3-interface
+PKG=github.com/cyverse/s3rods
 VERSION=v0.1.0
 GIT_COMMIT?=$(shell git rev-parse HEAD)
 BUILD_DATE?=$(shell date -u +"%Y-%m-%dT%H:%M:%SZ")
@@ -12,5 +12,5 @@ GOPATH=$(shell go env GOPATH)
 .PHONY: build
 build:
 	mkdir -p bin
-	CGO_ENABLED=0 GOOS=linux go build -ldflags=${LDFLAGS} -o bin/s3-interface ./cmd/
+	CGO_ENABLED=0 GOOS=linux go build -ldflags=${LDFLAGS} -o bin/s3rods ./cmd/
 	

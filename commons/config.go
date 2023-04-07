@@ -16,7 +16,7 @@ const (
 func GetDefaultDataRootDirPath() string {
 	dirPath, err := os.Getwd()
 	if err != nil {
-		return "/var/lib/s3-interface"
+		return "/var/lib/s3rods"
 	}
 	return dirPath
 }

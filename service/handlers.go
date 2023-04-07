@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/cyverse/s3-interface/types"
+	"github.com/cyverse/s3rods/types"
 	"github.com/gin-gonic/gin"
 	"github.com/rs/xid"
 	log "github.com/sirupsen/logrus"
@@ -37,7 +37,7 @@ func (service *S3Service) handlePing(c *gin.Context) {
 }
 
 func (service *S3Service) setResponseHeader(header http.Header) {
-	header.Set("Server", "S3-Interface")
+	header.Set("Server", "S3Rods")
 	header.Set("X-Amz-Request-Id", xid.New().String()) // new iD
 	header.Set("X-Content-Type-Options", "nosniff")
 	header.Set("X-Xss-Protection", "1; mode=block")
